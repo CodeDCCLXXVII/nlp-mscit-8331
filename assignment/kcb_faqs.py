@@ -2,6 +2,7 @@ import pandas as pd
 import nltk as nl
 import re
 import string
+import json
 
 
 def load_kcb_faqs_data(filepath):
@@ -61,14 +62,21 @@ def classify_using_bi_grams_computation(text, classes_data):
                     intent_group_dict_item['intent_group_text'].count(input_tag[0])
             except:
                 x = 0.00
-        intent_classification_item = {'intent': intent_group_dict_item['intent_group'], 'probability': x}
+        intent_classification_item = {"intent": intent_group_dict_item['intent_group'], "probability": x}
         intent_classification.append(intent_classification_item)
     return intent_classification
+
+
+def print_pretty(response):
+    parsed = json.dumps(response, indent=4, sort_keys=True)
+    print(parsed)
 
 
 if __name__ == '__main__':
     kcb_faqs_data = load_kcb_faqs_data('data/KCB FAQs.xlsx')
     intent_classes_data = extra_intent_text_and_bi_grams(kcb_faqs_data)
     input_text = input("Enter your KCB question: ")
-    print(classify_using_bi_grams_computation(input_text, intent_classes_data))
+    print_pretty(classify_using_bi_grams_computation(input_text, intent_classes_data))
+
+
 
